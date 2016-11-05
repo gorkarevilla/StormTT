@@ -19,7 +19,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<!-- who the developers are for the project -->
 	<developers>
 		<developer>
@@ -39,8 +39,8 @@
 			</roles>
 		</developer>
 	</developers>
-	
-	
+
+
 
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
@@ -55,6 +55,12 @@
 			<artifactId>storm-core</artifactId>
 			<version>1.0.2</version>
 			<scope>goal</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.twitter4j/twitter4j-stream -->
+		<dependency>
+			<groupId>org.twitter4j</groupId>
+			<artifactId>twitter4j-stream</artifactId>
+			<version>4.0.5</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.twitter4j/twitter4j-core -->
 		<dependency>
