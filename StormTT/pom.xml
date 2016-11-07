@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>goal</groupId>
+	<groupId>master2016</groupId>
 	<artifactId>StormTT</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -43,12 +43,6 @@
 
 
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.storm/storm-core -->
 		<dependency>
 			<groupId>org.apache.storm</groupId>
@@ -62,17 +56,11 @@
 			<artifactId>twitter4j-stream</artifactId>
 			<version>4.0.5</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.twitter4j/twitter4j-core -->
-		<dependency>
-			<groupId>org.twitter4j</groupId>
-			<artifactId>twitter4j-core</artifactId>
-			<version>4.0.3</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka_2.11 -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.11</artifactId>
-			<version>0.10.1.0</version>
+			<artifactId>kafka_2.10</artifactId>
+			<version>0.8.2.1</version>
 		</dependency>
 	</dependencies>
 </project>
