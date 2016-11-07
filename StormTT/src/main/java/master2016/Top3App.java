@@ -16,7 +16,7 @@ public class Top3App {
 	
 	
 	//Default parameters values
-	private static String langList = "es";
+	private static String langList = "es,casa";
 	private static String zookeeperURL = "localhost:2181";
 	private static String topologyName = "StormTT";
 	private static String folder = "output/";
@@ -54,9 +54,14 @@ public class Top3App {
 			topologyName = args[2];
 			folder = args[3];
 		}
+	
+		if (DEBUG) System.out.println("Parms: LangList: "+langList+" zookeeperURL: "+zookeeperURL+" topologyName: "+
+										topologyName + " folder: " + folder);
 		
 		
 
 	}
+	
+	
 
 }
