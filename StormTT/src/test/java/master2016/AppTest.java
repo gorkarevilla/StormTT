@@ -1,4 +1,4 @@
-package goal.StormTT;
+package master2016;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
