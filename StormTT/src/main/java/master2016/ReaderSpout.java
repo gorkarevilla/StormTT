@@ -23,7 +23,8 @@ import org.apache.storm.tuple.Values;
 public class ReaderSpout {
     
     private SpoutOutputCollector collector;
-    public static final String LANGUAGE_STREAMNAME = "language";
+    public static final String LANGUAGE_STREAMNAME = "languagestream";
+    public static final String LANGUAGE_FIELDNAME = "language"; 
     public static final String WINDOW_FIELDNAME = "window"; 
 
     public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
@@ -43,7 +44,7 @@ public class ReaderSpout {
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-            declarer.declareStream(TEMPERATURE_STREAMNAME, new Fields(ROOM_FIELDNAME, TEMPERATURE_FIELDNAME));
+            declarer.declareStream(LANGUAGE_STREAMNAME, new Fields(LANGUAGE_FIELDNAME, WINDOW_FIELDNAME));
     }
     
 }
