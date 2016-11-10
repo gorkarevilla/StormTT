@@ -1,5 +1,7 @@
 package master2016;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 * 
@@ -16,7 +18,7 @@ public class Top3App {
 	
 	
 	//Default parameters values
-	private static String langList = "es,casa";
+	private static String langString = "es,casa";
 	private static String zookeeperURL = "localhost:2181";
 	private static String topologyName = "StormTT";
 	private static String folder = "output/";
@@ -27,7 +29,8 @@ public class Top3App {
 	//Iteration Counter
 	private static int counter = 0;
 	
-	
+	//List with languages to be filter
+	private static List<Lang> langList = new ArrayList<Lang>();
 	
 	/**
 	 * 
@@ -49,17 +52,45 @@ public class Top3App {
 	
 		//Replace with Parameters
 		if (args.length == 4) {
-			langList = args[0];
+			langString = args[0];
 			zookeeperURL = args[1];
 			topologyName = args[2];
 			folder = args[3];
 		}
 	
-		if (DEBUG) System.out.println("Parms: LangList: "+langList+" zookeeperURL: "+zookeeperURL+" topologyName: "+
+		if (DEBUG) System.out.println("Parms: LangString: "+langString+" zookeeperURL: "+zookeeperURL+" topologyName: "+
 										topologyName + " folder: " + folder);
+		
+		//Create the List
+		langToList(langString);
+		
 		
 		
 
+	}
+	
+	/**
+	 * 
+	 * Create the langList with languages inside
+	 * 
+	 * 
+	 * @param s with the CSV format:  lang1:window1,lang2:window2,lang3:window3
+	 */
+	private static void langToList(String s) {
+		
+		//Split all the languages in each cell
+		String[] langs = s.split(",");
+		
+		//Split each language in id and window and insert in the list
+		for(String l: langs) {
+			String lang = l.split(":")[0];
+			String window = l.split(":")[1];
+			
+			langList.add(new Lang(lang,window));
+		}
+		
+		if (DEBUG) System.out.println("List: "+langList.toString());
+		
 	}
 	
 	
