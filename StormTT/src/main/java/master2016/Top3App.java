@@ -64,6 +64,11 @@ public class Top3App {
 		//Create the List
 		langToList(langString);
 		
+		//Create topology
+		Topology topology = new Topology(topologyName,langList,folder);
+		
+		//Start the cluster
+		topology.startCluster();
 		
 		
 

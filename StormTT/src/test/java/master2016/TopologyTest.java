@@ -1,9 +1,12 @@
 package master2016;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.storm.utils.Utils;
 
 /**
-*
+* Test topology Locally
 *
 * @authors	Alvaro Feal;
 * 			Gorka Revilla
@@ -15,15 +18,27 @@ public class TopologyTest {
 	private static Topology topology;
 	
 	public static void main(String[] args) {
-		if (Top3App.DEBUG) System.out.println("");
-		topology = new Topology();
-
-		topology.start();
+		
+		//Create a list
+		List<Lang> langList = new ArrayList<Lang>();
+		
+		// Lang, Window
+		langList.add(new Lang("es","casa"));
+		langList.add(new Lang("en","home"));
+		langList.add(new Lang("ar","hogar"));
 		
 		
-		Utils.sleep(30000);
+		if (Top3App.DEBUG) System.out.println("Starting...");
+		topology = new Topology("StormTopology",langList,"output/");
 		
+		topology.startLocalCluster();
+		
+		if (Top3App.DEBUG) System.out.println("Started!");
+		Utils.sleep(45000);
+		
+		if (Top3App.DEBUG) System.out.println("Stoping...");
 		topology.stop();
+		if (Top3App.DEBUG) System.out.println("Stoped!");
 		
 	}
 	
