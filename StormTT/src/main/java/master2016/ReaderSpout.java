@@ -11,7 +11,8 @@ package master2016;
  */
 
 import java.util.Map;
-import java.util.Random;
+import java.lang.IllegalArgumentException;
+import static master2016.Top3App.DEBUG;
 
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -20,7 +21,7 @@ import org.apache.storm.topology.base.BaseRichSpout;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 
-public class ReaderSpout {
+public class ReaderSpout extends BaseRichSpout{
     
     private SpoutOutputCollector collector;
     public static final String LANGUAGE_STREAMNAME = "languagestream";
@@ -32,15 +33,13 @@ public class ReaderSpout {
     }
 
     public void nextTuple() {
-            // CREATE EVENTS FOR 1000 ROOMS WITH TEMPERATURE BETWEEN 0 AND 199 C
-            Values values = new Values("language"+"es");
+            
+            Values values = new Values("language"+"es"+"ordenador");
             collector.emit(LANGUAGE_STREAMNAME,values);
-            System.out.println("Emitting: " + values);
-            try {
-                    Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                    e.printStackTrace();
+            if (DEBUG) {
+                System.out.println("Emitting: " + values);
             }
+           
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {

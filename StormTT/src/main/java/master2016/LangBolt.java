@@ -11,6 +11,7 @@ package master2016;
  */
 
 import java.util.Map;
+import static master2016.Top3App.DEBUG;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -19,8 +20,8 @@ import org.apache.storm.tuple.Tuple;
 
 public class LangBolt extends BaseRichBolt{
     
-        private String fieldname;
-	private String lang;
+        private final String fieldname;
+	private final String lang;
         
 	public LangBolt (String fieldname, String lang){
 		this.fieldname = fieldname;
@@ -33,7 +34,9 @@ public class LangBolt extends BaseRichBolt{
 	}
 
 	public void execute(Tuple input) {
-		System.out.println("Received: " + input.getValues());
+		if (DEBUG) {
+                    System.out.println("Received: " + input.getValues());
+                }
 		String valueByField = input.getValueByField(fieldname).toString();
 		
             if(valueByField.equals(lang)) {
