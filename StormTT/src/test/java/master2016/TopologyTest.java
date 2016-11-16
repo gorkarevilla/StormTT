@@ -2,7 +2,9 @@ package master2016;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
 
 /**
@@ -16,6 +18,17 @@ import org.apache.storm.utils.Utils;
 public class TopologyTest {
 
 	private static Topology topology;
+	
+	
+	
+	//Array with langs to choose randomly
+	private static String[] langs = {"es","en","ar"};
+	
+	//Ten words to test randomly
+	private static String[] hashtagsES = {"hola","que","si","adios","casa","piso","coche","dormir","bien","mal"};
+	private static String[] hashtagsEN = {"hello","bye","yes","no","home","sleep","try","best","good","bad"};
+	private static String[] hashtagsAR = {"carro","hogar","pive","chao","chevere","boludo","mate","coger","che","linda"};
+
 	
 	public static void main(String[] args) {
 		
@@ -34,12 +47,46 @@ public class TopologyTest {
 		topology.startLocalCluster();
 		
 		if (Top3App.DEBUG) System.out.println("Started!");
-		Utils.sleep(45000);
+		
+		if (Top3App.DEBUG) System.out.println("Sending Messages.");
+		
+		
+		for (int i=0;i<100;++i){
+			generateRandomInputs();
+			Utils.sleep(500);
+		}
 		
 		if (Top3App.DEBUG) System.out.println("Stoping...");
 		topology.stop();
 		if (Top3App.DEBUG) System.out.println("Stoped!");
 		
+	}
+	
+	
+	/**
+	 * lang
+	 * hashtag
+	 * 
+	 * @return
+	 */
+	public static Values generateRandomInputs(){
+				
+		String lang = langs[new Random().nextInt(3)];
+		String hashtag = "";
+		
+		if(lang.equals("es")){
+			hashtag = hashtagsES[new Random().nextInt(10)];
+		}else if(lang.equals("en")){
+			hashtag = hashtagsEN[new Random().nextInt(10)];
+		}else if(lang.equals("ar")){
+			hashtag = hashtagsAR[new Random().nextInt(10)];
+		}else {
+			if(Top3App.DEBUG) System.err.println("Out of Range: ");
+		}
+		
+		if(Top3App.DEBUG) System.out.println("Sending=> Lang: "+lang+" Hashtag: "+hashtag);
+		
+		return new Values(lang, hashtag);
 	}
 	
 	
