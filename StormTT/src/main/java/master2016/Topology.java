@@ -9,7 +9,6 @@ import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.topology.TopologyBuilder;
-import org.apache.storm.utils.Utils;
 
 /**
  * Defines the Topology to be used by Storm
@@ -19,8 +18,8 @@ import org.apache.storm.utils.Utils;
  * @since 07-11-2016
  */
 public class Topology {
-	
-	//Name of the Topology
+
+	// Name of the Topology
 	public String topologyName = "StormTopology";
 	public List<Lang> langList;
 	public String folder;
@@ -31,7 +30,7 @@ public class Topology {
 
 	// Builder of the topology
 	private TopologyBuilder builder;
-	
+
 	// Only for local use
 	private LocalCluster lcluster;
 
@@ -40,45 +39,54 @@ public class Topology {
 	private Boolean DEBUGSTORM = true;
 	private final int NWORKERS = 5;
 	private final int MAXSPOUTPENDING = 5000;
-	
-	
+
 	/**
 	 * Builds the topology
-	 * @param folder 
-	 * @param langList 
+	 * 
+	 * @param folder
+	 * @param langList
 	 * 
 	 */
 	public Topology(String TopologyName, List<Lang> languageList, String f) {
 
-		if (Top3App.DEBUG) System.out.println("Creating Topology.");
-		
+		if (Top3App.DEBUG)
+			System.out.println("Creating Topology.");
+
 		this.topologyName = TopologyName;
 		this.langList = languageList;
 		this.folder = f;
-		
-		//Topology
+
+		// Topology
 		builder = new TopologyBuilder();
 
+		builder.setSpout("ReaderSpout", new ReaderSpout());
+
+		//One bolt for each language
+		for (Lang l: languageList) {
+			builder.setBolt("LangBolt"+l.getId(), new LangBolt(l.getId())).shuffleGrouping("ReaderSpout", Topology.STREAMNAME);
+		}
+		
 		/*
 		 * TODO Define topology
 		 */
-		
-		//Configuration
+
+		// Configuration
 		configuration = new Config();
 		configuration.setDebug(this.DEBUGSTORM);
 		configuration.setNumWorkers(this.NWORKERS);
 		configuration.setMaxSpoutPending(this.MAXSPOUTPENDING);
-		
+
 	}
-	
+
 	/**
 	 * Start the topology in a cluster
 	 * 
 	 */
 	public void startCluster() {
-		
-		if (Top3App.DEBUG) System.out.println("Starting Cluster...");
-		
+
+		if (Top3App.DEBUG)
+			System.out.println("Starting Cluster...");
+
 		try {
 			StormSubmitter.submitTopology(this.topologyName, configuration, builder.createTopology());
 		} catch (AlreadyAliveException e) {
@@ -94,13 +102,14 @@ public class Topology {
 	 * Start the Storm Topology when running locally
 	 */
 	public void startLocalCluster() {
-		
-		if (Top3App.DEBUG) System.out.println("Starting LocalCluster...");
-		
-		//Create the cluster
+
+		if (Top3App.DEBUG)
+			System.out.println("Starting LocalCluster...");
+
+		// Create the cluster
 		lcluster = new LocalCluster();
-		lcluster.submitTopology(this.topologyName,configuration, builder.createTopology());
-		
+		lcluster.submitTopology(this.topologyName, configuration, builder.createTopology());
+
 	}
 
 	/**

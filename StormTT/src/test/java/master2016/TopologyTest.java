@@ -50,11 +50,14 @@ public class TopologyTest {
 		
 		if (Top3App.DEBUG) System.out.println("Sending Messages.");
 		
-		
+		/*
 		for (int i=0;i<100;++i){
 			generateRandomInputs();
 			Utils.sleep(500);
 		}
+		*/
+		
+		Utils.sleep(30000);
 		
 		if (Top3App.DEBUG) System.out.println("Stoping...");
 		topology.stop();
