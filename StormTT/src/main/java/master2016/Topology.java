@@ -27,6 +27,8 @@ public class Topology {
 	public static final String STREAMNAME = "hashtagstream";
 	public static final String LANGUAGE_FIELDNAME = "language";
 	public static final String HASHTAG_FIELDNAME = "hashtag";
+        public static final String WINDOW_FIELDNAME = "window";
+        public static final String STATE_FIELDNAME = "state";
 
 	// Builder of the topology
 	private TopologyBuilder builder;
