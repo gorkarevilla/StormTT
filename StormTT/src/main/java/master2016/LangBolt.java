@@ -10,6 +10,7 @@ import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
+import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
@@ -55,7 +56,7 @@ public class LangBolt extends BaseRichBolt {
                             System.out.println("LangBolt"+this.lang+"=> Language: " + tupleLang + " Hashtag: "+tupleHashtag);
 
                     //Send to the next only the hashtag
-                    collector.emit(input,new Values(tupleHashtag));
+                    collector.emit(Topology.STREAMNAME, new Values(tupleHashtag));
                     //Confirm received
                     collector.ack(input);
                 
@@ -65,8 +66,8 @@ public class LangBolt extends BaseRichBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		// NO OUTPUTS
-
+            declarer.declareStream(Topology.STREAMNAME,
+				new Fields(Topology.HASHTAG_FIELDNAME));
 	}
 
 }

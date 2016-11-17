@@ -10,6 +10,7 @@ import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
+import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
@@ -31,7 +32,8 @@ public class WindowBolt extends BaseRichBolt{
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		// NO OUTPUTS
+	declarer.declareStream(Topology.STREAMNAME,
+				new Fields(Topology.HASHTAG_FIELDNAME, Topology.STATE_FIELDNAME));
 
 	}
 
@@ -46,46 +48,45 @@ public class WindowBolt extends BaseRichBolt{
 
     public void execute(Tuple input) {
         
-        if (Top3App.DEBUG)
-            System.out.println("WindowBolt"+this.window+"=> Received: " + input.getValues());
+        String tupleHashtag = input.getValueByField(Topology.HASHTAG_FIELDNAME).toString();
 
-            String tupleWindow = input.getValueByField(Topology.WINDOW_FIELDNAME).toString();
-            String tupleHashtag = input.getValueByField(Topology.HASHTAG_FIELDNAME).toString();
+        if (tupleHashtag.equals(window)) {
 
-            if (tupleWindow.equals(window)) {
+            if (Top3App.DEBUG)
+                    System.out.println("WindowBolt => Hashtag: "+tupleHashtag + " window matchs");
 
-                if (Top3App.DEBUG)
-                        System.out.println("WindowBolt"+this.window+"=> Window: " + tupleWindow + " Hashtag: "+tupleHashtag);
+            if (this.is_window_opened()){ 
 
-                if (this.is_window_opened()){ 
-                    
-                    this.opened = 0; 
-                    
-                    //Send to the next only the hashtag
-                    collector.emit(input,new Values(tupleHashtag));
-                    //Confirm received
-                    collector.ack(input);
-                
-                }   
-                    
-                else{
-                    
-                    this.opened = 1; 
-                    
-                    //Send to the next only the hashtag
-                    collector.emit(input,new Values(tupleHashtag));
-                    //Confirm received
-                    collector.ack(input);
+                this.opened = 0; 
 
-                }
+                //Send to the next only the hashtag
+                collector.emit(input,new Values(tupleHashtag, "closed"));
+                //Confirm received
+                collector.ack(input);
+
+            }   
+
+            else{
+
+                this.opened = 1; 
+
+                //Send to the next only the hashtag
+                collector.emit(input,new Values(tupleHashtag, "opened"));
+                //Confirm received
+                collector.ack(input);
+
             }
-            
+        }
+
             else{
             
                 if (this.is_window_opened()){
+                    
+                    if (Top3App.DEBUG)
+                    System.out.println("WindowBolt => Hashtag: "+tupleHashtag );
                 
                     //Send to the next only the hashtag
-                    collector.emit(input,new Values(tupleHashtag));
+                    collector.emit(input,new Values(tupleHashtag, "opened"));
                     //Confirm received
                     collector.ack(input);
                     

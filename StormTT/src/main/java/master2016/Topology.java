@@ -27,7 +27,6 @@ public class Topology {
 	public static final String STREAMNAME = "hashtagstream";
 	public static final String LANGUAGE_FIELDNAME = "language";
 	public static final String HASHTAG_FIELDNAME = "hashtag";
-        public static final String WINDOW_FIELDNAME = "window";
         public static final String STATE_FIELDNAME = "state";
 
 	// Builder of the topology
@@ -38,7 +37,7 @@ public class Topology {
 
 	// Configuration
 	private Config configuration;
-	private Boolean DEBUGSTORM = true;
+	private Boolean DEBUGSTORM = false;
 	private final int NWORKERS = 5;
 	private final int MAXSPOUTPENDING = 5000;
 
@@ -66,7 +65,8 @@ public class Topology {
 		//One bolt for each language
 		for (Lang l: languageList) {
 			builder.setBolt("LangBolt"+l.getId(), new LangBolt(l.getId())).shuffleGrouping("ReaderSpout", Topology.STREAMNAME);
-		}
+                        builder.setBolt("WindowBolt"+l.getId(), new WindowBolt(l.getWindow())).shuffleGrouping("LangBolt"+l.getId(), Topology.STREAMNAME);
+                }
 		
 		/*
 		 * TODO Define topology
