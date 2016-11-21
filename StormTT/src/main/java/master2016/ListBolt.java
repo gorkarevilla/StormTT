@@ -6,7 +6,10 @@
 package master2016;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -109,6 +112,20 @@ public class ListBolt extends BaseRichBolt {
 	 */
 	private String[][] getTop3Array() {
 		String[][] top3 = new String[3][2];
+                int x = 0; 
+                ValueComparator bvc =  new ValueComparator(this.hashtagList);
+                TreeMap<String,Integer> sorted_hashtag = new TreeMap<String,Integer>(bvc);
+                
+                sorted_hashtag.putAll(this.hashtagList); 
+                Set set = sorted_hashtag.entrySet();
+                Iterator i = set.iterator();
+                
+                while(i.hasNext() && (x < 3)) {
+                   x+= 1;
+                   Map.Entry me = (Map.Entry)i.next();
+                   top3[0][0] = me.getKey().toString();
+                   top3[0][1] = me.getValue().toString();
+                }
 
 		// TODO
 

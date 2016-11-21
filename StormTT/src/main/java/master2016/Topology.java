@@ -45,7 +45,7 @@ public class Topology {
 	// Configuration
 	private Config configuration;
 	private Boolean DEBUGSTORM = false;
-	private final int NWORKERS = 5;
+	private final int NWORKERS = 10;
 	private final int MAXSPOUTPENDING = 5000;
 
 	/**
@@ -75,8 +75,8 @@ public class Topology {
 					Topology.STREAMNAME);
 			builder.setBolt("WindowBolt" + l.getId(), new WindowBolt(l.getId(), l.getWindow()))
 					.shuffleGrouping("LangBolt" + l.getId(), Topology.STREAMNAME);
-			builder.setBolt("ListBolt" + l.getId(), new ListBolt(l.getId())).shuffleGrouping("WindowBolt" + l.getId(),
-					Topology.STREAMNAME);
+			builder.setBolt("ListBolt" + l.getId(), new ListBolt(l.getId())).
+                                shuffleGrouping("WindowBolt" + l.getId(), Topology.STREAMNAME);
 		}
 
 		/*
