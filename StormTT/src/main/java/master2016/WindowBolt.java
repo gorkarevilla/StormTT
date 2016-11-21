@@ -18,82 +18,84 @@ import org.apache.storm.tuple.Values;
  *
  * @author alvarofeal
  */
-public class WindowBolt extends BaseRichBolt{
-    
-    private String window;
-    private OutputCollector collector;
-    private int opened; 
-    
-    public WindowBolt (String window){
-    
-        this.window = window; 
-        this.opened = 0; 
-        
-    }
+public class WindowBolt extends BaseRichBolt {
 
-    public void declareOutputFields(OutputFieldsDeclarer declarer) {
-	declarer.declareStream(Topology.STREAMNAME,
-				new Fields(Topology.HASHTAG_FIELDNAME, Topology.STATE_FIELDNAME));
+	private String language;
+	private String window;
+	private OutputCollector collector;
+	private boolean isOpen;
+
+	public WindowBolt(String lang, String window) {
+
+		this.language = lang;
+		this.window = window;
+		this.isOpen = false;
 
 	}
 
-    public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
+	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		declarer.declareStream(Topology.STREAMNAME, new Fields(Topology.HASHTAG_FIELDNAME, Topology.STATE_FIELDNAME));
+
+	}
+
+	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
 
-    }
-    
-    public boolean is_window_opened(){
-        return (this.opened == 1);
-    }
+	}
 
-    public void execute(Tuple input) {
-        
-        String tupleHashtag = input.getValueByField(Topology.HASHTAG_FIELDNAME).toString();
+	/**
+	 * 
+	 * 
+	 * Will Emit: closed or opened to next bolt
+	 * 
+	 * 
+	 */
+	public void execute(Tuple input) {
 
-        if (tupleHashtag.equals(window)) {
+		String tupleHashtag = input.getValueByField(Topology.HASHTAG_FIELDNAME).toString();
 
-            if (Top3App.DEBUG)
-                    System.out.println("WindowBolt => Hashtag: "+tupleHashtag + " window matchs");
+		if (tupleHashtag.equals(window)) {
 
-            if (this.is_window_opened()){ 
+			if (Top3App.DEBUG)
+				System.out.println("WindowBolt" + this.language + "=> Hashtag: " + tupleHashtag + " window matchs");
 
-                this.opened = 0; 
+			if (this.isOpen) {
 
-                //Send to the next only the hashtag
-                collector.emit(input,new Values(tupleHashtag, "closed"));
-                //Confirm received
-                collector.ack(input);
+				this.isOpen = false;
 
-            }   
+				// Send to the next only the hashtag
+				collector.emit(input, new Values(tupleHashtag, "closed"));
+				// Confirm received
+				collector.ack(input);
 
-            else{
+			}
 
-                this.opened = 1; 
+			else {
 
-                //Send to the next only the hashtag
-                collector.emit(input,new Values(tupleHashtag, "opened"));
-                //Confirm received
-                collector.ack(input);
+				this.isOpen = true;
 
-            }
-        }
+				// Send to the next only the hashtag
+				collector.emit(input, new Values(tupleHashtag, "opened"));
+				// Confirm received
+				collector.ack(input);
 
-            else{
-            
-                if (this.is_window_opened()){
-                    
-                    if (Top3App.DEBUG)
-                    System.out.println("WindowBolt => Hashtag: "+tupleHashtag );
-                
-                    //Send to the next only the hashtag
-                    collector.emit(input,new Values(tupleHashtag, "opened"));
-                    //Confirm received
-                    collector.ack(input);
-                    
-                }
-            
-            }
-    
-    }
-    
+			}
+		} else {
+
+			if (this.isOpen) {
+
+				if (Top3App.DEBUG)
+					System.out.println("WindowBolt" + this.language + "=> Hashtag: " + tupleHashtag);
+
+				// Send to the next only the hashtag
+				collector.emit(input, new Values(tupleHashtag, "opened"));
+				// Confirm received
+				collector.ack(input);
+
+			}
+
+		}
+
+	}
+
 }

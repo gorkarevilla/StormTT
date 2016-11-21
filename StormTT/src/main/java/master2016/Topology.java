@@ -27,7 +27,14 @@ public class Topology {
 	public static final String STREAMNAME = "hashtagstream";
 	public static final String LANGUAGE_FIELDNAME = "language";
 	public static final String HASHTAG_FIELDNAME = "hashtag";
-        public static final String STATE_FIELDNAME = "state";
+	public static final String STATE_FIELDNAME = "state";
+
+	public static final String TOP1HASHTAG_FIELDNAME = "top1hashtag";
+	public static final String TOP1VALUE_FIELDNAME = "top1value";
+	public static final String TOP2HASHTAG_FIELDNAME = "top2hashtag";
+	public static final String TOP2VALUE_FIELDNAME = "top2value";
+	public static final String TOP3HASHTAG_FIELDNAME = "top3hashtag";
+	public static final String TOP3VALUE_FIELDNAME = "top3value";
 
 	// Builder of the topology
 	private TopologyBuilder builder;
@@ -62,12 +69,16 @@ public class Topology {
 
 		builder.setSpout("ReaderSpout", new ReaderSpout());
 
-		//One bolt for each language
-		for (Lang l: languageList) {
-			builder.setBolt("LangBolt"+l.getId(), new LangBolt(l.getId())).shuffleGrouping("ReaderSpout", Topology.STREAMNAME);
-                        builder.setBolt("WindowBolt"+l.getId(), new WindowBolt(l.getWindow())).shuffleGrouping("LangBolt"+l.getId(), Topology.STREAMNAME);
-                }
-		
+		// One bolt for each language
+		for (Lang l : languageList) {
+			builder.setBolt("LangBolt" + l.getId(), new LangBolt(l.getId())).shuffleGrouping("ReaderSpout",
+					Topology.STREAMNAME);
+			builder.setBolt("WindowBolt" + l.getId(), new WindowBolt(l.getId(), l.getWindow()))
+					.shuffleGrouping("LangBolt" + l.getId(), Topology.STREAMNAME);
+			builder.setBolt("ListBolt" + l.getId(), new ListBolt(l.getId())).shuffleGrouping("WindowBolt" + l.getId(),
+					Topology.STREAMNAME);
+		}
+
 		/*
 		 * TODO Define topology
 		 */

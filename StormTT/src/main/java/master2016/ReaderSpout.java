@@ -32,9 +32,10 @@ public class ReaderSpout extends BaseRichSpout {
 	}
 
 	public void nextTuple() {
-
+		//Only for testing, Remove in the future
 		collector.emit(Topology.STREAMNAME, TopologyTest.generateRandomInputs());
 
+		//TODO
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
