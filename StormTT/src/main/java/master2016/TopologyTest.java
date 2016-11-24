@@ -43,7 +43,7 @@ public class TopologyTest {
 
 		if (Top3App.DEBUG)
 			System.out.println("Starting...");
-		topology = new Topology("StormTopology", langList, "output/");
+		topology = new Topology("StormTopology", langList, "output/","16");
 
 		topology.startLocalCluster();
 

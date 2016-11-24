@@ -23,6 +23,7 @@ public class Topology {
 	public String topologyName = "StormTopology";
 	public List<Lang> langList;
 	public String folder;
+	public String groupID;
 
 	public static final String STREAMNAME = "hashtagstream";
 	public static final String LANGUAGE_FIELDNAME = "language";
@@ -55,7 +56,7 @@ public class Topology {
 	 * @param langList
 	 * 
 	 */
-	public Topology(String TopologyName, List<Lang> languageList, String f) {
+	public Topology(String TopologyName, List<Lang> languageList, String f, String gid) {
 
 		if (Top3App.DEBUG)
 			System.out.println("Creating Topology.");
@@ -63,6 +64,7 @@ public class Topology {
 		this.topologyName = TopologyName;
 		this.langList = languageList;
 		this.folder = f;
+		this.groupID = gid;
 
 		// Topology
 		builder = new TopologyBuilder();
@@ -75,8 +77,10 @@ public class Topology {
 					Topology.STREAMNAME);
 			builder.setBolt("WindowBolt" + l.getId(), new WindowBolt(l.getId(), l.getWindow()))
 					.shuffleGrouping("LangBolt" + l.getId(), Topology.STREAMNAME);
-			builder.setBolt("ListBolt" + l.getId(), new ListBolt(l.getId())).
-                                shuffleGrouping("WindowBolt" + l.getId(), Topology.STREAMNAME);
+			builder.setBolt("ListBolt" + l.getId(), new ListBolt(l.getId())).shuffleGrouping("WindowBolt" + l.getId(),
+					Topology.STREAMNAME);
+			builder.setBolt("WritterBolt" + l.getId(), new WritterBolt(l.getId(), groupID))
+					.shuffleGrouping("ListBolt" + l.getId(), Topology.STREAMNAME);
 		}
 
 		/*

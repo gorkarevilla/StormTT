@@ -24,7 +24,7 @@ public class Top3App {
 	private static String folder = "output/";
 	
 	//Group ID
-	private static final String GROUP_ID = "GOAL";
+	private static final String GROUP_ID = "16";
 	
 	//Iteration Counter
 	private static int counter = 0;
@@ -65,7 +65,7 @@ public class Top3App {
 		langToList(langString);
 		
 		//Create topology
-		Topology topology = new Topology(topologyName,langList,folder);
+		Topology topology = new Topology(topologyName,langList,folder,GROUP_ID);
 		
 		//Start the cluster
 		topology.startCluster();
