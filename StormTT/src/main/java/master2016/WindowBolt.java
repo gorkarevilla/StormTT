@@ -20,6 +20,11 @@ import org.apache.storm.tuple.Values;
  */
 public class WindowBolt extends BaseRichBolt {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8262948702119426728L;
+	
 	private String language;
 	private String window;
 	private OutputCollector collector;
@@ -64,7 +69,7 @@ public class WindowBolt extends BaseRichBolt {
 				this.isOpen = false;
 
 				// Send to the next only the hashtag
-				collector.emit(input, new Values(tupleHashtag, "closed"));
+				collector.emit(Topology.STREAMNAME, new Values(tupleHashtag, "closed"));
 				// Confirm received
 				collector.ack(input);
 
@@ -75,7 +80,7 @@ public class WindowBolt extends BaseRichBolt {
 				this.isOpen = true;
 
 				// Send to the next only the hashtag
-				collector.emit(input, new Values(tupleHashtag, "opened"));
+				collector.emit(Topology.STREAMNAME, new Values(tupleHashtag, "opened"));
 				// Confirm received
 				collector.ack(input);
 
@@ -88,7 +93,7 @@ public class WindowBolt extends BaseRichBolt {
 					System.out.println("WindowBolt" + this.language + "=> Hashtag: " + tupleHashtag);
 
 				// Send to the next only the hashtag
-				collector.emit(input, new Values(tupleHashtag, "opened"));
+				collector.emit(Topology.STREAMNAME, new Values(tupleHashtag, "opened"));
 				// Confirm received
 				collector.ack(input);
 
