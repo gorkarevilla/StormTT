@@ -53,7 +53,7 @@ public class LangBolt extends BaseRichBolt {
 		if (tupleLang.equals(lang)) {
 
 			if (Top3App.DEBUG)
-				System.out.println("LangBolt" + this.lang + "=> Language: " + tupleLang + " Hashtag: " + tupleHashtag);
+				//System.out.println("LangBolt" + this.lang + "=> Language: " + tupleLang + " Hashtag: " + tupleHashtag);
 
 			// Send to the next only the hashtag
 			collector.emit(Topology.STREAMNAME, new Values(tupleHashtag));

@@ -60,31 +60,30 @@ public class ListBolt extends BaseRichBolt {
 	 */
 	public void execute(Tuple input) {
 
-		
-		if (Top3App.DEBUG)
-			System.out.println("ListBolt" + this.language + "HelloList");
-		
 		String hashtag = input.getValueByField(Topology.HASHTAG_FIELDNAME).toString();
 		boolean isOpen = (input.getValueByField(Topology.STATE_FIELDNAME).toString()).equals("opened");
 
-		if (isOpen) {
+		// Add always
+		addToList(hashtag);
 
-			addToList(hashtag);
+		if (Top3App.DEBUG)
+			System.out.println("ListBolt" + this.language + "=> Hashtag ADD: " + hashtag);
+
+		if (!isOpen) { // IF is Closed send to next Spout the top3 and clear the
+						// list
 
 			if (Top3App.DEBUG)
-				System.out.println("ListBolt" + this.language + "=> Hashtag: " + hashtag + " add to List");
-
-		} else { // IF is Closed send to next Spout the top3 and clear the list
+				System.out.println("ListBolt" + this.language + "=> CLOSING LIST!");
 
 			String[][] top3 = getTop3Array();
 
 			// Send to the next only the hashtags and values
 			collector.emit(Topology.STREAMNAME, new Values(top3[0][0], top3[0][1], top3[1][0], top3[1][1], top3[2][0], top3[2][1]));
 
+
 			// Confirm received
 			collector.ack(input);
-			
-			
+
 			this.hashtagList.clear();
 
 		}
@@ -113,6 +112,7 @@ public class ListBolt extends BaseRichBolt {
 	 */
 	private String[][] getTop3Array() {
 		String[][] top3 = new String[3][2];
+
                 ValueComparator bvc =  new ValueComparator(this.hashtagList);
                 TreeMap<String,Integer> sorted_hashtag = new TreeMap<String,Integer>(bvc);
                 
@@ -132,7 +132,6 @@ public class ListBolt extends BaseRichBolt {
                        top3[c][1] = me.getValue().toString();
                    }
                 }
-
 		// TODO
 
 		if (Top3App.DEBUG) {

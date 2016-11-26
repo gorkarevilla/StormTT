@@ -89,8 +89,8 @@ public class TopologyTest {
 				System.err.println("Out of Range: ");
 		}
 
-		if (Top3App.DEBUG)
-			System.out.println("Sending=> Lang: " + lang + " Hashtag: " + hashtag);
+		//if (Top3App.DEBUG)
+			//System.out.println("Sending=> Lang: " + lang + " Hashtag: " + hashtag);
 
 		return new Values(lang, hashtag);
 	}

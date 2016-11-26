@@ -20,6 +20,11 @@ import org.apache.storm.tuple.Values;
  */
 public class WindowBolt extends BaseRichBolt {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8262948702119426728L;
+	
 	private String language;
 	private String window;
 	private OutputCollector collector;
