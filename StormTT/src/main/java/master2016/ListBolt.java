@@ -56,6 +56,7 @@ public class ListBolt extends BaseRichBolt {
 	 * 
 	 * Will add to the list
 	 * 
+         * @param input
 	 */
 	public void execute(Tuple input) {
 
@@ -78,7 +79,7 @@ public class ListBolt extends BaseRichBolt {
 			String[][] top3 = getTop3Array();
 
 			// Send to the next only the hashtags and values
-			collector.emit(input, new Values(top3[0][0], top3[0][1], top3[1][0], top3[1][1], top3[2][0], top3[2][1]));
+			collector.emit(Topology.STREAMNAME, new Values(top3[0][0], top3[0][1], top3[1][0], top3[1][1], top3[2][0], top3[2][1]));
 
 			// Confirm received
 			collector.ack(input);
@@ -112,19 +113,24 @@ public class ListBolt extends BaseRichBolt {
 	 */
 	private String[][] getTop3Array() {
 		String[][] top3 = new String[3][2];
-                int x = 0; 
                 ValueComparator bvc =  new ValueComparator(this.hashtagList);
                 TreeMap<String,Integer> sorted_hashtag = new TreeMap<String,Integer>(bvc);
                 
                 sorted_hashtag.putAll(this.hashtagList); 
                 Set set = sorted_hashtag.entrySet();
                 Iterator i = set.iterator();
-                
-                while(i.hasNext() && (x < 3)) {
-                   x+= 1;
-                   Map.Entry me = (Map.Entry)i.next();
-                   top3[0][0] = me.getKey().toString();
-                   top3[0][1] = me.getValue().toString();
+                for (int c = 0; c<3; c++) {                   
+                   
+                   if (i.hasNext() == false){
+                       top3[c][0] = "null";
+                       top3[c][1] = "null";
+                   
+                   }
+                   else {
+                       Map.Entry me = (Map.Entry)i.next();
+                       top3[c][0] = me.getKey().toString();
+                       top3[c][1] = me.getValue().toString();
+                   }
                 }
 
 		// TODO
@@ -135,7 +141,7 @@ public class ListBolt extends BaseRichBolt {
 			System.out.println("ListBolt" + this.language + "=> Top3: " + top3[2][0] + ":" + top3[2][1]);
 		}
 
-		return null;
+		return top3;
 	}
 
 }

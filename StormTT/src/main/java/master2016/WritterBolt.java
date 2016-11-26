@@ -48,9 +48,9 @@ public class WritterBolt extends BaseRichBolt {
 	}
 
 	public void execute(Tuple input) {
-		// if (Top3App.DEBUG)
-		// System.out.println("WritterBolt" + this.lang + "=> Received: " +
-		// input.getValues());
+		 if (Top3App.DEBUG)
+		 System.out.println("WritterBolt" + this.lang + "=> Received: " +
+		 input.getValues());
 
 		++counter;
 

@@ -77,8 +77,8 @@ public class Topology {
 					Topology.STREAMNAME);
 			builder.setBolt("WindowBolt" + l.getId(), new WindowBolt(l.getId(), l.getWindow()))
 					.shuffleGrouping("LangBolt" + l.getId(), Topology.STREAMNAME);
-			builder.setBolt("ListBolt" + l.getId(), new ListBolt(l.getId())).shuffleGrouping("WindowBolt" + l.getId(),
-					Topology.STREAMNAME);
+			builder.setBolt("ListBolt"+l.getId(), new ListBolt(l.getId()))
+                                .shuffleGrouping("WindowBolt"+l.getId(), Topology.STREAMNAME);
 			builder.setBolt("WritterBolt" + l.getId(), new WritterBolt(l.getId(), groupID))
 					.shuffleGrouping("ListBolt" + l.getId(), Topology.STREAMNAME);
 		}
