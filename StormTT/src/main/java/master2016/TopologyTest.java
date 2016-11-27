@@ -41,28 +41,28 @@ public class TopologyTest {
 		langList.add(new Lang("en", "home"));
 		langList.add(new Lang("ar", "hogar"));
 
-		if (Top3App.DEBUG)
+		//if (Top3App.DEBUG)
 			System.out.println("Starting...");
 		topology = new Topology("StormTopology", langList, "output/","16");
 
 		topology.startLocalCluster();
 
-		if (Top3App.DEBUG)
+		//if (Top3App.DEBUG)
 			System.out.println("Started!");
 
-		if (Top3App.DEBUG)
+		//if (Top3App.DEBUG)
 			System.out.println("Sending Messages.");
 
 		/*
 		 * for (int i=0;i<100;++i){ generateRandomInputs(); Utils.sleep(500); }
 		 */
 
-		Utils.sleep(50000);
+		Utils.sleep(120000);
 
-		if (Top3App.DEBUG)
+		//if (Top3App.DEBUG)
 			System.out.println("Stoping...");
 		topology.stop();
-		if (Top3App.DEBUG)
+		//if (Top3App.DEBUG)
 			System.out.println("Stoped!");
 
 	}
@@ -77,7 +77,7 @@ public class TopologyTest {
 		String lang = langs[new Random().nextInt(3)];
 		String hashtag = "";
 
-		Utils.sleep(50);
+		//Utils.sleep(50);
 		if (lang.equals("es")) {
 			hashtag = hashtagsES[new Random().nextInt(10)];
 		} else if (lang.equals("en")) {
@@ -89,8 +89,8 @@ public class TopologyTest {
 				System.err.println("Out of Range: ");
 		}
 
-		//if (Top3App.DEBUG)
-			//System.out.println("Sending=> Lang: " + lang + " Hashtag: " + hashtag);
+		if (Top3App.DEBUG)
+			System.out.println("Sending=> Lang: " + lang + " Hashtag: " + hashtag);
 
 		return new Values(lang, hashtag);
 	}

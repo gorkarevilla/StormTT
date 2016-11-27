@@ -58,7 +58,7 @@ public class Topology {
 	 */
 	public Topology(String TopologyName, List<Lang> languageList, String f, String gid) {
 
-		if (Top3App.DEBUG)
+		//if (Top3App.DEBUG)
 			System.out.println("Creating Topology.");
 
 		this.topologyName = TopologyName;
@@ -83,9 +83,6 @@ public class Topology {
 					.shuffleGrouping("ListBolt" + l.getId(), Topology.STREAMNAME);
 		}
 
-		/*
-		 * TODO Define topology
-		 */
 
 		// Configuration
 		configuration = new Config();
@@ -101,7 +98,7 @@ public class Topology {
 	 */
 	public void startCluster() {
 
-		if (Top3App.DEBUG)
+		//if (Top3App.DEBUG)
 			System.out.println("Starting Cluster...");
 
 		try {
@@ -120,7 +117,7 @@ public class Topology {
 	 */
 	public void startLocalCluster() {
 
-		if (Top3App.DEBUG)
+		//if (Top3App.DEBUG)
 			System.out.println("Starting LocalCluster...");
 
 		// Create the cluster

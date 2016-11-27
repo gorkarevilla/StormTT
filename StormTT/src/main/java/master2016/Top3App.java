@@ -14,7 +14,7 @@ import java.util.List;
 public class Top3App {
 
 	//Debug mode for prints
-	public static final Boolean DEBUG = true;
+	public static final Boolean DEBUG = false;
 	
 	
 	//Default parameters values

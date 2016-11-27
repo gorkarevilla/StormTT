@@ -123,7 +123,7 @@ public class ListBolt extends BaseRichBolt {
                    
                    if (i.hasNext() == false){
                        top3[c][0] = "null";
-                       top3[c][1] = "null";
+                       top3[c][1] = "0";
                    
                    }
                    else {
@@ -132,7 +132,6 @@ public class ListBolt extends BaseRichBolt {
                        top3[c][1] = me.getValue().toString();
                    }
                 }
-		// TODO
 
 		if (Top3App.DEBUG) {
 			System.out.println("ListBolt" + this.language + "=> Top1: " + top3[0][0] + ":" + top3[0][1]);
