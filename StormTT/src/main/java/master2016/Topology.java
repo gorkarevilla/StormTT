@@ -21,6 +21,7 @@ public class Topology {
 
 	// Name of the Topology
 	public String topologyName = "StormTopology";
+	public String kafkaBrokerURL;
 	public List<Lang> langList;
 	public String folder;
 	public String groupID;
@@ -56,24 +57,30 @@ public class Topology {
 	 * @param langList
 	 * 
 	 */
-	public Topology(String TopologyName, List<Lang> languageList, String f, String gid) {
+	public Topology(String TopologyName, String kafkaURL, List<Lang> languageList, String path, String gid) {
 
 		//if (Top3App.DEBUG)
 			System.out.println("Creating Topology.");
 
 		this.topologyName = TopologyName;
+		this.kafkaBrokerURL = kafkaURL;
 		this.langList = languageList;
-		this.folder = f;
+		this.folder = path;
 		this.groupID = gid;
 
 		// Topology
 		builder = new TopologyBuilder();
 
-		builder.setSpout("ReaderSpout", new ReaderSpout());
+		//builder.setSpout("ReaderSpout", new ReaderSpout());
 
+		builder.setSpout("KafkaSpout", new KafkaSpout());
+		
 		// One bolt for each language
 		for (Lang l : languageList) {
-			builder.setBolt("LangBolt" + l.getId(), new LangBolt(l.getId())).shuffleGrouping("ReaderSpout",
+			//builder.setBolt("LangBolt" + l.getId(), new LangBolt(l.getId())).shuffleGrouping("ReaderSpout",
+			//		Topology.STREAMNAME);
+			
+			builder.setBolt("LangBolt" + l.getId(), new LangBolt(l.getId())).shuffleGrouping("KafkaSpout",
 					Topology.STREAMNAME);
 			builder.setBolt("WindowBolt" + l.getId(), new WindowBolt(l.getId(), l.getWindow()))
 					.shuffleGrouping("LangBolt" + l.getId(), Topology.STREAMNAME);

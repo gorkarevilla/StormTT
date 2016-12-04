@@ -1,7 +1,13 @@
 package master2016;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 /**
 * 
@@ -18,19 +24,29 @@ public class Top3App {
 	
 	
 	//Default parameters values
-	private static String langString = "es,casa";
-	private static String zookeeperURL = "localhost:2181";
-	private static String topologyName = "StormTT";
-	private static String folder = "output/";
+	public static String langString = "es:casa";
+	public static String kafkaBrokerURL = "localhost:9092";
+	public static String topologyName = "StormTT";
+	public static String folder = "output/";
+	
+	//Parameters for Kafka
+	private static String topicName = "master2016";
 	
 	//Group ID
-	private static final String GROUP_ID = "16";
+	public static final String GROUP_ID = "16";
 	
 	//Iteration Counter
 	private static int counter = 0;
 	
 	//List with languages to be filter
 	private static List<Lang> langList = new ArrayList<Lang>();
+	
+	
+	//Properties for the KafkaConsumer
+	private static Properties consumerProperties;
+	
+	//KafkaConsumer
+	private static KafkaConsumer<String,String> kafkaConsumer;
 	
 	/**
 	 * 
@@ -53,22 +69,47 @@ public class Top3App {
 		//Replace with Parameters
 		if (args.length == 4) {
 			langString = args[0];
-			zookeeperURL = args[1];
+			kafkaBrokerURL = args[1];
 			topologyName = args[2];
 			folder = args[3];
 		}
 	
-		if (DEBUG) System.out.println("Parms: LangString: "+langString+" zookeeperURL: "+zookeeperURL+" topologyName: "+
+		if (DEBUG) System.out.println("Parms: LangString: "+langString+" zookeeperURL: "+kafkaBrokerURL+" topologyName: "+
 										topologyName + " folder: " + folder);
 		
 		//Create the List
 		langToList(langString);
 		
 		//Create topology
-		Topology topology = new Topology(topologyName,langList,folder,GROUP_ID);
+		Topology topology = new Topology(topologyName,kafkaBrokerURL,langList,folder,GROUP_ID);
+		
+		configureConsumer();
+		kafkaConsumer = new KafkaConsumer<String,String>(consumerProperties);
+		
+		try{
+			
+			kafkaConsumer.subscribe(Arrays.asList(topicName));
+			while(true){
+				ConsumerRecords<String,String> records = kafkaConsumer.poll(10);
+				for(ConsumerRecord<String, String> record : records) {
+					System.out.println("Language: "+record.value());
+					
+				}
+			}
+			
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			kafkaConsumer.close();
+		}
 		
 		//Start the cluster
-		topology.startCluster();
+		//topology.startCluster();
+		
+		
+		//Start local cluster
+		topology.startLocalCluster();
+		
 		
 		
 
@@ -96,6 +137,22 @@ public class Top3App {
 		
 		if (DEBUG) System.out.println("List: "+langList.toString());
 		
+	}
+	
+	
+	
+
+	/**
+	 * Define properties for KafkaConsumer
+	 */
+	private static void configureConsumer() {
+		consumerProperties = new Properties();
+		consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,kafkaBrokerURL);
+		consumerProperties.put("group.id",Top3App.GROUP_ID);
+		consumerProperties.put("enable.auto.commit","true");
+		consumerProperties.put("auto.commit.intervals.ms","1000");
+		consumerProperties.put("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer");
+		consumerProperties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 	}
 	
 	
