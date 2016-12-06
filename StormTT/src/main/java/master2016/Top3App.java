@@ -42,6 +42,8 @@ public class Top3App {
 	private static Properties consumerProperties;
 
 	public static KafkaBrokerConsumer kafkaConsumer;
+        
+        public static KafkaBrokerProducer kafkaProducer;
 	
 	/**
 	 * 
@@ -62,6 +64,10 @@ public class Top3App {
 	public static void main(String[] args) {
 	
 		//Replace with Parameters
+                if (args.length == 1){
+                    kafkaBrokerURL = args[0];
+                }
+                
 		if (args.length == 4) {
 			langString = args[0];
 			kafkaBrokerURL = args[1];
@@ -72,23 +78,19 @@ public class Top3App {
 		if (DEBUG) System.out.println("Parms: LangString: "+langString+" zookeeperURL: "+kafkaBrokerURL+" topologyName: "+
 										topologyName + " folder: " + folder);
 		
-		kafkaConsumer = new KafkaBrokerConsumer();
-		
+		kafkaConsumer = new master2016.KafkaBrokerConsumer();
+                		
 		//Create the List
 		langToList(langString);
 		
 		//Create topology
 		Topology topology = new Topology(topologyName,kafkaBrokerURL,langList,folder,GROUP_ID);
 		
-		
-		//Start the cluster
+                //Start the cluster
 		//topology.startCluster();
-		
 		
 		//Start local cluster
 		topology.startLocalCluster();
-		
-		
 		
 
 	}
