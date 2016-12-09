@@ -53,7 +53,7 @@ public class Topology {
 	/**
 	 * Builds the topology
 	 * 
-	 * @param folder
+	 * @param file
 	 * @param langList
 	 * 
 	 */
