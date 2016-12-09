@@ -8,6 +8,7 @@ package master2016;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
@@ -15,6 +16,17 @@ import java.util.logging.Logger;
 import org.apache.storm.tuple.Values;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+
+import twitter4j.HashtagEntity;
+import twitter4j.StallWarning;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+import twitter4j.StatusListener;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
+import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.json.DataObjectFactory;
+
 import org.json.simple.parser.JSONParser;
 
 /**
@@ -24,6 +36,7 @@ import org.json.simple.parser.JSONParser;
  * @version 0.1
  * @since 07-11-2016
  */
+@SuppressWarnings("deprecation")
 public class startTwitterApp {
 
 	public static String mode;
@@ -34,6 +47,9 @@ public class startTwitterApp {
 	public static String kafkaBrokerURL;
 	public static String inputFile;
 	public static KafkaBrokerProducer kafkaProducer;
+	
+	private static final Boolean CREATEJSON = false;
+	private static final String OUTPUTJSON = "twitterOutput.json";
 
 	public static void main(String[] args) {
 
@@ -48,12 +64,10 @@ public class startTwitterApp {
 		} else {
 			printUsage();
 		}
-		String[] args_main = new String[1];
-		args_main[0] = kafkaBrokerURL;
 
 		kafkaProducer = new KafkaBrokerProducer();
 
-		if (mode.equals("1")) { //FILE PART
+		if (mode.equals("1")) { // FILE PART
 			FileInputStream fstream = null;
 			BufferedReader br = null;
 			try {
@@ -89,7 +103,74 @@ public class startTwitterApp {
 				}
 			}
 		} else if (mode.equals("2")) { // TWITTER PART
+			ConfigurationBuilder cb = new ConfigurationBuilder();
+			cb.setJSONStoreEnabled(true);
+			cb.setDebugEnabled(true)
+				.setOAuthConsumerKey(apiKey)
+				.setOAuthConsumerSecret(apiSecret)
+				.setOAuthAccessToken(tokenValue)
+				.setOAuthAccessTokenSecret(tokenSecret);
 			
+			StatusListener listener = new StatusListener() {
+				public void onStatus(Status status) {
+					if(Top3App.DEBUG)System.out.println(status.getUser().getName() + " : " + status.getText());
+					
+					for(HashtagEntity ht : status.getHashtagEntities()) {
+						
+						String hashtag = ht.getText();
+						String lang = status.getLang();
+						if(Top3App.DEBUG)System.out.println("->"+lang+","+hashtag);
+						kafkaProducer.send(new Values(lang,hashtag));
+					}
+					
+					if(CREATEJSON){
+						try {
+							
+							FileWriter fw = new FileWriter(OUTPUTJSON, true);
+							// Append to the file
+							fw.write(DataObjectFactory.getRawJSON(status));
+							fw.write(System.getProperty("line.separator"));
+							
+							//fw.write(System.lineSeparator()); // Only > Java 7 
+							fw.close();
+
+							
+						} catch (IOException ioe) {
+							System.err.println("IOException: " + ioe.getMessage());
+						}
+					}
+				}
+
+				public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+				}
+
+				public void onException(Exception ex) {
+					ex.printStackTrace();
+				}
+
+				public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+					
+				}
+
+				public void onScrubGeo(long userId, long upToStatusId) {
+					
+				}
+
+				public void onStallWarning(StallWarning warning) {
+					
+				}
+			};
+			/*
+			 * Get tweets from
+			 * https://stream.twitter.com/1.1/statuses/sample.json
+			 */
+			TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+			twitterStream.addListener(listener);
+			// sample() method internally creates a thread which manipulates
+			// TwitterStream and calls these adequate listener methods
+			// continuously.
+			twitterStream.sample();
+
 		}
 
 	}
