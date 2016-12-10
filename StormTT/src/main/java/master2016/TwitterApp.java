@@ -37,7 +37,7 @@ import org.json.simple.parser.JSONParser;
  * @since 07-11-2016
  */
 @SuppressWarnings("deprecation")
-public class startTwitterApp {
+public class TwitterApp {
 
 	public static String mode;
 	public static String apiKey;
@@ -90,7 +90,7 @@ public class startTwitterApp {
 				System.out.println("Your file couldn't be found");
 				printUsage();
 			} catch (IOException ex) {
-				Logger.getLogger(startTwitterApp.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(TwitterApp.class.getName()).log(Level.SEVERE, null, ex);
 			} catch (ParseException ex) {
 				System.out.println("The provided file should contain one tweet per line in JSON format");
 				printUsage();
@@ -99,7 +99,7 @@ public class startTwitterApp {
 					fstream.close();
 					br.close();
 				} catch (IOException ex) {
-					Logger.getLogger(startTwitterApp.class.getName()).log(Level.SEVERE, null, ex);
+					Logger.getLogger(TwitterApp.class.getName()).log(Level.SEVERE, null, ex);
 				}
 			}
 		} else if (mode.equals("2")) { // TWITTER PART
