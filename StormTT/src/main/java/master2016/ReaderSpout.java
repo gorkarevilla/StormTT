@@ -28,6 +28,7 @@ public class ReaderSpout extends BaseRichSpout {
 	
 	private SpoutOutputCollector collector;
 
+	@SuppressWarnings("rawtypes")
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		this.collector = collector;
 	}
@@ -35,8 +36,6 @@ public class ReaderSpout extends BaseRichSpout {
 	public void nextTuple() {
 		//Only for testing, Remove in the future
 		collector.emit(Topology.STREAMNAME, TopologyTest.generateRandomInputs());
-
-		//TODO
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {

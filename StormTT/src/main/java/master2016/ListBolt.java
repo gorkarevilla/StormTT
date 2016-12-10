@@ -8,6 +8,7 @@ package master2016;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import org.apache.storm.task.OutputCollector;
@@ -27,6 +28,11 @@ import org.apache.storm.tuple.Values;
  */
 public class ListBolt extends BaseRichBolt {
 
+	/**
+	 * Generated Serial
+	 */
+	private static final long serialVersionUID = 338022787526504012L;
+	
 	private String language;
 	private OutputCollector collector;
 
@@ -47,6 +53,7 @@ public class ListBolt extends BaseRichBolt {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
 
@@ -117,8 +124,8 @@ public class ListBolt extends BaseRichBolt {
                 TreeMap<String,Integer> sorted_hashtag = new TreeMap<String,Integer>(bvc);
                 
                 sorted_hashtag.putAll(this.hashtagList); 
-                Set set = sorted_hashtag.entrySet();
-                Iterator i = set.iterator();
+                Set<Entry<String, Integer>> set = sorted_hashtag.entrySet();
+                Iterator<Entry<String, Integer>> i = set.iterator();
                 for (int c = 0; c<3; c++) {                   
                    
                    if (i.hasNext() == false){
@@ -127,7 +134,7 @@ public class ListBolt extends BaseRichBolt {
                    
                    }
                    else {
-                       Map.Entry me = (Map.Entry)i.next();
+                       Map.Entry<String,Integer> me = (Map.Entry<String,Integer>)i.next();
                        top3[c][0] = me.getKey().toString();
                        top3[c][1] = me.getValue().toString();
                    }

@@ -46,6 +46,7 @@ public class WindowBolt extends BaseRichBolt {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
 

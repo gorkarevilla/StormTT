@@ -38,6 +38,7 @@ public class LangBolt extends BaseRichBolt {
 		this.lang = lang;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
 

@@ -33,6 +33,7 @@ public class KafkaSpout extends BaseRichSpout {
 
 	//private KafkaConsumer kafkaConsumer = new KafkaConsumer(Top3App.kafkaBrokerURL);
 
+	@SuppressWarnings("rawtypes")
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		this.collector = collector;
 	}

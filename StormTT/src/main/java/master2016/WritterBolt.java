@@ -36,9 +36,6 @@ public class WritterBolt extends BaseRichBolt {
 	private String filename;
 	private int counter;
 
-	// Collector
-	private OutputCollector collector;
-
 	public WritterBolt(String lang, String gid, String folder) {
 		this.lang = lang;
 		this.groupID = gid;
@@ -66,8 +63,8 @@ public class WritterBolt extends BaseRichBolt {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
-		this.collector = collector;
 
 	}
 

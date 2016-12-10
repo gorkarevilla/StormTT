@@ -25,7 +25,6 @@ public class KafkaBrokerProducer {
 	// KafkaConsumer
 	private static KafkaProducer<String, String> kafkaProducer;
 	private final String topic = "master2016";
-	private final int partition = 0;
 
 	public KafkaBrokerProducer() {
 
