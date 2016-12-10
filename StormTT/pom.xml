@@ -130,7 +130,7 @@
                     </platforms>
                     <programs>
                         <program>
-                        <mainClass>master2016.startTwitterApp</mainClass>
+                        <mainClass>master2016.TwitterApp</mainClass>
                         <name>startTwitterApp.sh</name>
                         <jvmSettings>
                         <extraArguments>
