@@ -35,6 +35,9 @@ public class WindowBolt extends BaseRichBolt {
 		this.language = lang;
 		this.window = window;
 		this.isOpen = false;
+		
+		if(Top3App.INFO)
+			System.out.println("Window "+language+" is Closed");
 
 	}
 
@@ -73,6 +76,8 @@ public class WindowBolt extends BaseRichBolt {
 				// Confirm received
 				collector.ack(input);
 
+				if(Top3App.INFO)
+					System.out.println("Window "+language+" is Closed");
 			}
 
 			else {
@@ -83,7 +88,9 @@ public class WindowBolt extends BaseRichBolt {
 				collector.emit(Topology.STREAMNAME, new Values(tupleHashtag, "opened"));
 				// Confirm received
 				collector.ack(input);
-
+				
+				if(Top3App.INFO)
+					System.out.println("Window "+language+" is Opened");
 			}
 		} else {
 

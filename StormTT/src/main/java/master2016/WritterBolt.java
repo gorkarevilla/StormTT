@@ -39,11 +39,11 @@ public class WritterBolt extends BaseRichBolt {
 	// Collector
 	private OutputCollector collector;
 
-	public WritterBolt(String lang, String gid) {
+	public WritterBolt(String lang, String gid, String folder) {
 		this.lang = lang;
 		this.groupID = gid;
 
-		this.filename = this.lang + "_" + this.groupID + ".log";
+		this.filename = folder+this.lang + "_" + this.groupID + ".log";
 		this.counter = 0;
 
 		// Delete the file
@@ -100,6 +100,9 @@ public class WritterBolt extends BaseRichBolt {
 
 			if(Top3App.DEBUG)
 				System.out.println("WritterBolt"+this.lang+"=> "+line);
+			
+			if(Top3App.INFO)
+				System.out.println("Writting in file "+filename+": "+line);
 			
 		} catch (IOException ioe) {
 			System.err.println("IOException: " + ioe.getMessage());

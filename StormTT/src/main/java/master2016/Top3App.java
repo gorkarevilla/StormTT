@@ -13,7 +13,9 @@ import java.util.List;
 public class Top3App {
 
 	// Debug mode for prints
-	public static final Boolean DEBUG = true;
+	public static final Boolean DEBUG = false;
+	// Info mode for prints
+	public static final Boolean INFO = true;
 
 	// Default parameters values
 	public static String langString = "es:casa,en:home,ar:hogar";
@@ -62,7 +64,7 @@ public class Top3App {
 			System.exit(1);
 		}
 
-		if (DEBUG)
+		if (INFO)
 			System.out.println("Parms: LangString: " + langString + " zookeeperURL: " + kafkaBrokerURL
 					+ " topologyName: " + topologyName + " folder: " + folder);
 
@@ -75,7 +77,7 @@ public class Top3App {
 		Topology topology = new Topology(topologyName, kafkaBrokerURL, langList, folder, GROUP_ID);
 
 		// Start the cluster
-		// topology.startCluster();
+		//topology.startCluster();
 
 		// Start local cluster
 		topology.startLocalCluster();

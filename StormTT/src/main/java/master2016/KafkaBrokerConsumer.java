@@ -27,7 +27,7 @@ public class KafkaBrokerConsumer {
 		ConsumerRecords<String,String> records = kafkaConsumer.poll(10);
 			Values lvalues = new Values();
 			for(ConsumerRecord<String, String> record : records) {
-				System.out.println("Consumer: "+record.value());
+				//System.out.println("Consumer: "+record.value());
 				
 				lvalues.add(record.value());
 			}

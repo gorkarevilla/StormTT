@@ -46,6 +46,7 @@ public class KafkaSpout extends BaseRichSpout {
 		{
 			for (int i=0;i<valueList.size();i=i+2) {
 				String lang = valueList.get(i).replace("[", ""); //Delete [ of the array
+				lang = lang.replaceAll(" ", ""); //Delete space of the lang
 				String hashtag = valueList.get(i+1).replaceAll("]", ""); //Delete ] of the array
 				
 				collector.emit(Topology.STREAMNAME, new Values(lang,hashtag));

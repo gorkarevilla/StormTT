@@ -35,7 +35,7 @@ public class KafkaBrokerProducer {
 	}
 
 	public void send(Values values) {
-		kafkaProducer.send(new ProducerRecord<String, String>(topic, partition, values.get(0).toString(),
+		kafkaProducer.send(new ProducerRecord<String, String>(topic, values.get(0).toString()+","+
 				values.get(1).toString()));
 
 	}
