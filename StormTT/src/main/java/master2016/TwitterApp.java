@@ -67,6 +67,8 @@ public class TwitterApp {
 				fstream = new FileInputStream(inputFile);
 				br = new BufferedReader(new InputStreamReader(fstream));
 				String strLine;
+				if(Top3App.INFO)
+					System.out.println("Reading from File "+inputFile+"...");
 				while ((strLine = br.readLine()) != null) {
 					Status tweet = TwitterObjectFactory.createStatus(strLine);
 					readStatus(tweet);
@@ -96,6 +98,8 @@ public class TwitterApp {
 			cb.setDebugEnabled(true).setOAuthConsumerKey(apiKey).setOAuthConsumerSecret(apiSecret)
 					.setOAuthAccessToken(tokenValue).setOAuthAccessTokenSecret(tokenSecret);
 
+			if(Top3App.INFO)
+				System.out.println("Reading Streaming from Twitter...");
 			StatusListener listener = new StatusListener() {
 				public void onStatus(Status status) {
 					readStatus(status);

@@ -77,10 +77,10 @@ public class Top3App {
 		Topology topology = new Topology(topologyName, kafkaBrokerURL, langList, folder, GROUP_ID);
 
 		// Start the cluster
-		//topology.startCluster();
+		topology.startCluster();
 
 		// Start local cluster
-		topology.startLocalCluster();
+		//topology.startLocalCluster();
 
 	}
 
