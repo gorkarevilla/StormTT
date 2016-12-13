@@ -9,7 +9,6 @@ import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.storm.tuple.Values;
 
 /**
  * 
@@ -33,9 +32,8 @@ public class KafkaBrokerProducer {
 
 	}
 
-	public void send(Values values) {
-		kafkaProducer.send(new ProducerRecord<String, String>(topic, values.get(0).toString()+","+
-				values.get(1).toString()));
+	public void send(String lang, String hashtag) {
+		kafkaProducer.send(new ProducerRecord<String, String>(topic, lang+","+hashtag));
 
 	}
 

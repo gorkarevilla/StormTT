@@ -18,9 +18,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-                <maven.compiler.target>1.7</maven.compiler.target>
-                <maven.compiler.source>1.7</maven.compiler.source>
-        </properties>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+	</properties>
 
 	<!-- who the developers are for the project -->
 	<developers>
@@ -49,7 +49,7 @@
 			<groupId>org.apache.storm</groupId>
 			<artifactId>storm-core</artifactId>
 			<version>1.0.2</version>
-		 <type>jar</type>
+			<type>jar</type>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.twitter4j/twitter4j-stream -->
 		<dependency>
@@ -98,49 +98,43 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-                <dependency>
-                    <groupId>com.googlecode.json-simple</groupId>
-                    <artifactId>json-simple</artifactId>
-                    <version>1.1.1</version>
-                </dependency>
-
 	</dependencies>
-        <build>
-            <plugins>
-                <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId> appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                    <id>assemble-standalone</id>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>assemble</goal>
-                    </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
-                    <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
-                    <repositoryLayout>flat</repositoryLayout>
-                    <platforms>
-                        <platform>unix</platform>
-                    </platforms>
-                    <programs>
-                        <program>
-                        <mainClass>master2016.TwitterApp</mainClass>
-                        <name>startTwitterApp.sh</name>
-                        <jvmSettings>
-                        <extraArguments>
-                            <extraArgument>-server</extraArgument>
-                        </extraArguments>
-                        </jvmSettings>
-                        </program>
-                    </programs>
-                </configuration>
-                </plugin>
-            </plugins>
-        </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId> appassembler-maven-plugin</artifactId>
+				<version>1.10</version>
+				<executions>
+					<execution>
+						<id>assemble-standalone</id>
+						<phase>package</phase>
+						<goals>
+							<goal>assemble</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+					<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+					<copyConfigurationDirectory>true</copyConfigurationDirectory>
+					<repositoryLayout>flat</repositoryLayout>
+					<platforms>
+						<platform>unix</platform>
+					</platforms>
+					<programs>
+						<program>
+							<mainClass>master2016.TwitterApp</mainClass>
+							<name>startTwitterApp.sh</name>
+							<jvmSettings>
+								<extraArguments>
+									<extraArgument>-server</extraArgument>
+								</extraArguments>
+							</jvmSettings>
+						</program>
+					</programs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
